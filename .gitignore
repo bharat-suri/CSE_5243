@@ -3,5 +3,5 @@ venv
 .DS_Store
 Notebooks
 Resources
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
