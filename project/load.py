@@ -24,5 +24,6 @@ for idx, row in df.iterrows():
 categories = sorted(categories.items(), key=lambda x: x[1], reverse=True)
 
 print ('Number of unique categories: ', len(categories))
-print ('Top 10 most frequent categories')
-print (categories[:10])
+print ('Top 50 most frequent categories')
+for x in categories[:50]:
+    print (x[0], ': ', x[1])
