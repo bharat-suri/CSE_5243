@@ -1,28 +1,20 @@
 import pandas as pd
-import numpy as np
+import json
 
-directory = '/Users/bharatsuri/Github/CS_5243/project/data/'
-business = directory + 'business.pkl'
+with open('business.json', encoding="utf8") as json_file:
+    data = json_file.readlines()
+    data = list(map(json.loads, data))
 
 
-df = pd.read_pickle(business)
-print (df.head(10))
+from pandas.io.json import json_normalize
 
-categories = {}
-r = 0
-for idx, row in df.iterrows():
-    print ('At row # {}'.format(r), end='\r')
-    r += 1
-    if row['categories'] != None:
-        for c in row['categories'].split(', '):
-            if c not in categories:
-                categories[c] = 1
-            else:
-                categories[c] += 1
+df = json_normalize(data)
 
-categories = sorted(categories.items(), key=lambda x: x[1], reverse=True)
-
-print ('Number of unique categories: ', len(categories))
-print ('Top 50 most frequent categories')
-for x in categories[:50]:
-    print (x[0], ': ', x[1])
+df1=(df.categories.str.split('\s*,\s*', expand=True)
+   .stack()
+   .str.get_dummies()
+   .sum(level=0))
+#df=df.join(df1)
+df1.head()
+#print(df.astype(bool).sum(axis=0))
+#df.to_pickle('business.pkl')
