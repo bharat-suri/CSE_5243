@@ -2,12 +2,11 @@ import pandas as pd
 import json
 
 directory = '/Users/bharatsuri/Github/CS_5243/project/data/'
-business = 'business_df.pkl'
-restaurants = 'restaurants_df.pkl'
-restaurants_json = 'restaurants.json'
-filename = directory + business
+business = directory + 'business.pkl'
+restaurants = directory + 'restaurants.pkl'
+restaurants_json = directory + 'restaurants.json'
 
-df = pd.read_pickle(filename)
+df = pd.read_pickle(business)
 category = 'Restaurants'
 features = [
     'business_id',
@@ -31,11 +30,12 @@ category = 'Restaurants'
 r = 0
 
 df = df[df['categories'].str.contains(category)]
+df = df[df['city'] == 'Toronto']
 
 print ('Total number of Restaurants: {}'.format(df.shape[0]))
-df.to_pickle(directory + restaurants)
+df.to_pickle(restaurants)
 
-with open(directory + restaurants_json, 'w+') as out_file:
+with open(restaurants_json, 'w+') as out_file:
     for idx, row in df.iterrows():
         json.dump(row.to_dict(), out_file)
         out_file.write('\n')

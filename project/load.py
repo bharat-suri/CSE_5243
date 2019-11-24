@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 
 directory = '/Users/bharatsuri/Github/CS_5243/project/data/'
-business = 'business_df.pkl'
+business = directory + 'business.pkl'
 
 
-df = pd.read_pickle(directory + business)
+df = pd.read_pickle(business)
 print (df.head(10))
 
 categories = {}
@@ -14,8 +14,7 @@ for idx, row in df.iterrows():
     print ('At row # {}'.format(r), end='\r')
     r += 1
     if row['categories'] != None:
-        category = row['categories'].split(', ')
-        for c in category:
+        for c in row['categories'].split(', '):
             if c not in categories:
                 categories[c] = 1
             else:
