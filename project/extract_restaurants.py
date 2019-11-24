@@ -1,8 +1,10 @@
 import pandas as pd
+import json
 
 directory = '/Users/bharatsuri/Github/CS_5243/project/data/'
 business = 'business_df.pkl'
 restaurants = 'restaurants_df.pkl'
+restaurants_json = 'restaurants.json'
 filename = directory + business
 
 df = pd.read_pickle(filename)
@@ -32,3 +34,8 @@ df = df[df['categories'].str.contains(category)]
 
 print ('Total number of Restaurants: {}'.format(df.shape[0]))
 df.to_pickle(directory + restaurants)
+
+with open(directory + restaurants_json, 'w+') as out_file:
+    for idx, row in df.iterrows():
+        json.dump(row.to_dict(), out_file)
+        out_file.write('\n')
