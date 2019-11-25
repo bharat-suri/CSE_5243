@@ -30,14 +30,6 @@ def run_svd(df):
     vect.fit(stemmed_corpus)
     X = vect.transform(stemmed_corpus).toarray()
 
-    # tf_idf = pd.DataFrame(
-    #     X.transpose(),
-    #     index=vect.get_feature_names(),
-    #     columns=df.index
-    # )
-
-    # print (tf_idf)
-
     n_concepts = 5
     concepts = [(lambda x: 'concept{:d}'.format(x))(i) for i in range(1,n_concepts+1)]
     U, Sigma, VT = randomized_svd(X, n_components=n_concepts)
@@ -49,30 +41,14 @@ def run_svd(df):
     )
     U_df['content'] = corpus
 
-    Sigma_df = pd.DataFrame(
-        np.diag(Sigma),
-        index=concepts,
-        columns=concepts
-    )
-
-    VT_df = pd.DataFrame(
-        VT,
-        index=concepts,
-        columns=vocab
-    )
-
     print (U_df)
-    print (Sigma_df)
-    print (VT_df.T)
+    return U_df
 
 print ('SVD for 2018...')
-run_svd(review_df)
+U_df = run_svd(review_df)
+for c in U_df:
+    review_df[c] = U_df[c]
 
-
-groups = review_df.groupby(review_df['date'].dt.to_period('Q'))
-
-for idx, group in groups:
-    print (idx)
-    run_svd(group)
+review_df.to_pickle(restaurants_review_pkl)
 
 # expanded_restaurant = restaurant_df['categories'].str.split(', ', expand=True).stack().str.get_dummies().sum(level=0)
